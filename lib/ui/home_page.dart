@@ -14,7 +14,10 @@ class _HomePageState extends State<HomePage> {
   final _SECRET_KEY = 'YddN-KDu6NAn16wQkqSSs8TAwUU';
   final _CLOUD_NAME = 'dinguq3pt';
   final _MAX_RESULTS = 20;
-
+  final _logoGiphy =
+      'https://developers.giphy.com/branch/master/static/header-logo-8974b8ae658f704a5b48a2d039b8ad93.gif';
+  final _logoCloudinary =
+      'https://res.cloudinary.com/cloudinary/image/upload/c_scale,w_200/v1/logo/for_dark_bg/cloudinary_logo_for_dark_bg.png';
   Future<Map> _getCloudinary() async {
     http.Response response;
     response = await http.get(
@@ -34,8 +37,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Image.network(
-            'https://developers.giphy.com/branch/master/static/header-logo-8974b8ae658f704a5b48a2d039b8ad93.gif'),
+        title: Image.network(_logoCloudinary),
         centerTitle: true,
       ),
       body: Column(
