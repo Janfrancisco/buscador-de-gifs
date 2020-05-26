@@ -11,37 +11,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _API_KEY = '162771559223464';
-  final __SECRET_KEY = 'YddN-KDu6NAn16wQkqSSs8TAwUU';
-  final __CLOUD_NAME = 'dinguq3pt';
-
-  String _search;
-  int _offset = 0;
+  final _SECRET_KEY = 'YddN-KDu6NAn16wQkqSSs8TAwUU';
+  final _CLOUD_NAME = 'dinguq3pt';
+  final _MAX_RESULTS = 20;
 
   Future<Map> _getCloudinary() async {
     http.Response response;
     response = await http.get(
-        'https://$_API_KEY:$__SECRET_KEY@api.cloudinary.com/v1_1/$__CLOUD_NAME/resources/image');
-    return json.decode(response.body);
-    //print(response);
-    //print(json.decode(response.body));
-  }
-
-  Future<Map> _getGifs() async {
-    http.Response response;
-
-    if (_search == null) {
-      response = await http.get(
-          'https://api.giphy.com/v1/gifs/trending?api_key=mrmz2v59GilEue2WMYHeVZ8ZSYxkF6wM&limit=20=0&rating=G');
-    } else {
-      response = await http.get(
-          'https://api.giphy.com/v1/gifs/search?api_key=mrmz2v59GilEue2WMYHeVZ8ZSYxkF6wM&q=$_search&limit=19&offset=$_offset&rating=G&lang=en');
-    }
+        'https://$_API_KEY:$_SECRET_KEY@api.cloudinary.com/v1_1/$_CLOUD_NAME/resources/image?max_results=$_MAX_RESULTS');
     return json.decode(response.body);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getCloudinary().then((value) => print(value['resources']));
   }
@@ -69,8 +51,8 @@ class _HomePageState extends State<HomePage> {
               textAlign: TextAlign.center,
               onSubmitted: (text) {
                 setState(() {
-                  _search = text;
-                  _offset = 0;
+                  /* _search = text;
+                  _offset = 0; */
                 });
               },
             ),
@@ -105,14 +87,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  int _getCount(List data) {
-    if (_search == null) {
-      return data.length;
-    } else {
-      return data.length + 1;
-    }
-  }
-
   Widget _createGifTable(context, snapShot) {
     return GridView.builder(
       padding: EdgeInsets.all(10.0),
@@ -121,36 +95,12 @@ class _HomePageState extends State<HomePage> {
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
       ),
-      itemCount: _getCount(snapShot.data['resources']),
+      itemCount: snapShot.data['resources'].length,
       itemBuilder: (context, index) {
-        if (_search == null || index < snapShot.data['data'].length) {
-          return GestureDetector(
-            child: Image.network(
-                snapShot.data['resources'][index]['secure_url'],
-                height: 300,
-                fit: BoxFit.cover),
-          );
-        } else {
-          return Container(
-            child: GestureDetector(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.add, color: Colors.white, size: 70),
-                  Text(
-                    'Carregar mais...',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ],
-              ),
-              onTap: () {
-                setState(() {
-                  _offset += 19;
-                });
-              },
-            ),
-          );
-        }
+        return GestureDetector(
+          child: Image.network(snapShot.data['resources'][index]['secure_url'],
+              height: 300, fit: BoxFit.cover),
+        );
       },
     );
   }
