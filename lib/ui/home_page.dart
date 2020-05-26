@@ -10,12 +10,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const API_KEY = '162771559223464';
-  static const _SECRET_KEY = 'YddN-KDu6NAn16wQkqSSs8TAwUU';
-  static const _CLOUD_NAME = 'dinguq3pt';
+  final _API_KEY = '162771559223464';
+  final __SECRET_KEY = 'YddN-KDu6NAn16wQkqSSs8TAwUU';
+  final __CLOUD_NAME = 'dinguq3pt';
 
   String _search;
   int _offset = 0;
+
+  Future<Map> _getCloudinary() async {
+    http.Response response;
+    response = await http.get(
+        'https://$_API_KEY:$__SECRET_KEY@api.cloudinary.com/v1_1/$__CLOUD_NAME/resources/image');
+    return json.decode(response.body);
+    //print(response);
+    //print(json.decode(response.body));
+  }
 
   Future<Map> _getGifs() async {
     http.Response response;
@@ -34,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getGifs().then((value) => print(value['data']));
+    _getCloudinary().then((value) => print(value['resources']));
   }
 
   @override
@@ -68,7 +77,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: FutureBuilder(
-              future: _getGifs(),
+              future: _getCloudinary(),
               builder: (context, snapShot) {
                 switch (snapShot.connectionState) {
                   case ConnectionState.waiting:
@@ -112,12 +121,12 @@ class _HomePageState extends State<HomePage> {
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
       ),
-      itemCount: _getCount(snapShot.data['data']),
+      itemCount: _getCount(snapShot.data['resources']),
       itemBuilder: (context, index) {
         if (_search == null || index < snapShot.data['data'].length) {
           return GestureDetector(
             child: Image.network(
-                snapShot.data['data'][index]['images']['fixed_height']['url'],
+                snapShot.data['resources'][index]['secure_url'],
                 height: 300,
                 fit: BoxFit.cover),
           );
