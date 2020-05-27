@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:buscador_gifs/ui/gif_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import 'package:flutter/material.dart';
 
@@ -10,10 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const API_KEY = '162771559223464';
-  static const _SECRET_KEY = 'YddN-KDu6NAn16wQkqSSs8TAwUU';
-  static const _CLOUD_NAME = 'dinguq3pt';
-
   String _search;
   int _offset = 0;
 
@@ -97,7 +96,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   int _getCount(List data) {
-    if (_search == null) {
+    if (_search == null || _search.isEmpty) {
       return data.length;
     } else {
       return data.length + 1;
@@ -116,10 +115,24 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (context, index) {
         if (_search == null || index < snapShot.data['data'].length) {
           return GestureDetector(
-            child: Image.network(
-                snapShot.data['data'][index]['images']['fixed_height']['url'],
-                height: 300,
-                fit: BoxFit.cover),
+            child: FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: snapShot.data['data'][index]['images']['fixed_height']
+                  ['url'],
+              height: 300.0,
+              fit: BoxFit.cover,
+            ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          GifPage(snapShot.data['data'][index])));
+            },
+            onLongPress: () {
+              Share.share(snapShot.data['data'][index]['images']['fixed_height']
+                  ['url']);
+            },
           );
         } else {
           return Container(
