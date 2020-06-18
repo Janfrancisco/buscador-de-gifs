@@ -1,7 +1,8 @@
 # buscador_gifs
 
 
-![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+![](https://github.com/Janfrancisco/buscador-de-gifs/blob/master/screenshots/tela1.PNG)
+Splash screeh from app
 
 A new Flutter project.
 
