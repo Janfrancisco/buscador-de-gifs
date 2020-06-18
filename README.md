@@ -1,5 +1,8 @@
 # buscador_gifs
 
+
+![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+
 A new Flutter project.
 
 ## Getting Started
