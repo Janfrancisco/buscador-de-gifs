@@ -1,10 +1,10 @@
 # buscador_gifs
 
-##### Screens from app
+
 ![](https://github.com/Janfrancisco/buscador-de-gifs/blob/master/screenshots/tela1.PNG)
 ![](https://github.com/Janfrancisco/buscador-de-gifs/blob/master/screenshots/tela2.PNG)
 
-
+##### Screens from app
 
 A new Flutter project.
 
